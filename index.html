@@ -1,1 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace CNAM Tunisie - PFE Project</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col justify-between text-slate-800">
 
+    <!-- TOP NAVIGATION BAR -->
+    <header id="mainHeader" class="hidden bg-emerald-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showSection('menuSection')">
+                <div class="bg-white text-emerald-700 p-2 rounded-xl font-bold">
+                    <i class="fa-solid fa-notes-medical text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base leading-none">Mon Espace CNAM</h1>
+                    <span class="text-[11px] text-emerald-200">Caisse Nationale d'Assurance Maladie</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-2 bg-emerald-800 px-3 py-1.5 rounded-lg text-xs">
+                    <i class="fa-solid fa-circle-user text-emerald-300"></i>
+                    <span id="displayNameBadge" class="font-medium">Utilisateur</span>
+                </div>
+                <button onclick="logout()" title="Déconnexion" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1 transition shadow">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span class="hidden sm:inline">Sortie</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full flex items-center justify-center">
+
+        <!-- ========================================== -->
+        <!-- 1. LOGIN / ENTRÉE SECTION                  -->
+        <!-- ========================================== -->
+        <section id="loginSection" class="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-200 p-8 space-y-6">
+            
+            <div class="text-center space-y-3">
+                <div class="w-20 h-20 mx-auto bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-600/30">
+                    <i class="fa-solid fa-hospital-user text-4xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Espace Assuré CNAM</h2>
+                    <p class="text-xs text-slate-500 mt-1">Connectez-vous pour accéder à vos services</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nom et Prénom</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="nameInput" placeholder="Ex: Mohamed Ben Salah" required 
+                            class="w-full border border-slate-200 rounded-xl py-2.5 pl-10 pr-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Matricule CNAM</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-id-card absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="matriculeInput" placeholder="Ex: 12345678-01" required 
+                            class="w-full border border-slate-200 rounded-xl py-2.5 pl-10 pr-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mot de passe</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400 text-sm"></i>
+                        <input type="password" id="passwordInput" placeholder="••••••••" required 
+                            class="w-full border border-slate-200 rounded-xl py-2.5 pl-10 pr-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>ENTRÉE</span>
+                </button>
+            </form>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- 2. MENU PRINCIPAL                         -->
+        <!-- ========================================== -->
+        <section id="menuSection" class="hidden w-full space-y-6">
+            
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Bienvenue, <span id="welcomeNameText" class="text-emerald-700">--</span> 👋</h2>
+                    <p class="text-xs text-slate-500">Sélectionnez le service que vous désirez consulter :</p>
+                </div>
+                <div class="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-xl text-xs font-semibold border border-emerald-200">
+                    Matricule: <span id="userMatriculeBadge">--</span>
+                </div>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- 1. Remboursement -->
+                <div onclick="showSection('remboursementSection')" 
+                    class="group bg-white hover:bg-emerald-50/60 border-2 border-slate-200 hover:border-emerald-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-emerald-700">Remboursements</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Suivi des bulletins de soin et virements bancaires.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-emerald-600 pt-3 border-t border-slate-100">
+                        <span>Consulter</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 2. Prise en Charge -->
+                <div onclick="showSection('priseEnChargeSection')" 
+                    class="group bg-white hover:bg-blue-50/60 border-2 border-slate-200 hover:border-blue-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-blue-700">Prise en Charge</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Plafond annuel Tiers-payant et dossiers APCI.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-blue-600 pt-3 border-t border-slate-100">
+                        <span>Consulter</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 3. Carnet Virtuel QR -->
+                <div onclick="showSection('carnetSection')" 
+                    class="group bg-white hover:bg-purple-50/60 border-2 border-slate-200 hover:border-purple-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-purple-100 text-purple-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-purple-700">Carnet Virtuel</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">QR Code d'identification auprès du médecin.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-purple-600 pt-3 border-t border-slate-100">
+                        <span>Afficher QR</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 4. Annuaire Géolocalisation (Amélioré) -->
+                <div onclick="showSection('annuaireSection')" 
+                    class="group bg-white hover:bg-amber-50/60 border-2 border-slate-200 hover:border-amber-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-amber-700">Annuaire Médical</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Trouver un médecin ou pharmacie par adresse et téléphone.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-amber-600 pt-3 border-t border-slate-100">
+                        <span>Chercher</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 5. Réclamation -->
+                <div onclick="showSection('reclamationSection')" 
+                    class="group bg-white hover:bg-rose-50/60 border-2 border-slate-200 hover:border-rose-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-rose-100 text-rose-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-rose-700">Réclamation</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Envoyer une réclamation sans se déplacer.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-rose-600 pt-3 border-t border-slate-100">
+                        <span>Envoyer</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- 6. Notifications -->
+                <div onclick="showSection('notifSection')" 
+                    class="group bg-white hover:bg-teal-50/60 border-2 border-slate-200 hover:border-teal-500 rounded-3xl p-6 cursor-pointer transition duration-300 shadow-sm hover:shadow-lg flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="w-12 h-12 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-teal-700">Rappels</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">Alertes de renouvellement et suivi.</p>
+                    </div>
+                    <div class="flex justify-between items-center text-xs font-bold text-teal-600 pt-3 border-t border-slate-100">
+                        <span>Voir</span><i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- 3. SOUS-SECTIONS DÉTAILLÉES                -->
+        <!-- ========================================== -->
+
+        <!-- Remboursement Section -->
+        <section id="remboursementSection" class="hidden w-full space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-emerald-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+                <h3 class="text-lg font-bold text-slate-800">Historique des Remboursements</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-400">
+                                <th class="pb-3">N° Dossier</th>
+                                <th class="pb-3">Acte</th>
+                                <th class="pb-3">Date</th>
+                                <th class="pb-3">Montant Remboursé</th>
+                                <th class="pb-3">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium">
+                            <tr>
+                                <td class="py-3 font-mono text-emerald-700 font-bold">REF-8890</td>
+                                <td class="py-3">Consultation Généraliste</td>
+                                <td class="py-3 text-slate-500">02/10/2026</td>
+                                <td class="py-3 font-bold text-emerald-600">21.000 DT</td>
+                                <td class="py-3"><span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold">Payé</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prise en Charge Section -->
+        <section id="priseEnChargeSection" class="hidden w-full space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-blue-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-3">
+                <h3 class="font-bold text-slate-800 text-sm">Plafond Annuel Tiers-Payant (2026)</h3>
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                    <div class="bg-blue-600 h-full rounded-full" style="width: 65%;"></div>
+                </div>
+                <div class="flex justify-between text-xs font-medium text-slate-500">
+                    <span>Consommé: <strong class="text-slate-800">195.000 DT</strong></span>
+                    <span>Restant: <strong class="text-blue-600">105.000 DT</strong></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Carnet Virtuel Section -->
+        <section id="carnetSection" class="hidden w-full max-w-md mx-auto space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-purple-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+            <div class="bg-gradient-to-br from-purple-800 to-indigo-900 text-white rounded-3xl p-6 shadow-xl text-center space-y-4">
+                <span class="bg-purple-600/50 text-purple-200 text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full">Carnet Virtuel Actif</span>
+                <div>
+                    <h3 class="text-xl font-bold" id="qrNameText">--</h3>
+                    <p class="text-xs text-purple-200" id="qrMatriculeText">Matricule: --</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl inline-block shadow-inner">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=CNAM-TUNISIE" alt="QR Code" class="w-40 h-40">
+                </div>
+                <p class="text-xs text-purple-200">Présentez ce QR code chez le pharmacien ou médecin.</p>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. ANNUAIRE MÉDICAL (Section Améliorée)    -->
+        <!-- ========================================== -->
+        <section id="annuaireSection" class="hidden w-full space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-amber-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Annuaire des Prestataires Conventionnés</h3>
+                    <p class="text-xs text-slate-500">Trouvez un médecin, pharmacie ou laboratoire متعاقد مع الكنام</p>
+                </div>
+
+                <!-- Barre de Recherche et Filtres -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">Gouvernorat (الولاية)</label>
+                        <select id="filterGov" onchange="filterDoctors()" class="w-full border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="all">Toutes les gouvernorats</option>
+                            <option value="Tunis">Tunis</option>
+                            <option value="Ariana">Ariana</option>
+                            <option value="Sousse">Sousse</option>
+                            <option value="Sfax">Sfax</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">Type / Spécialité</label>
+                        <select id="filterType" onchange="filterDoctors()" class="w-full border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="all">Tous les types</option>
+                            <option value="Médecin Généraliste">Médecin Généraliste</option>
+                            <option value="Médecin Spécialiste">Médecin Spécialiste</option>
+                            <option value="Pharmacie">Pharmacie</option>
+                            <option value="Laboratoire">Laboratoire d'analyse</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">Recherche par Nom</label>
+                        <input type="text" id="filterSearch" oninput="filterDoctors()" placeholder="Nom du médecin ou pharmacie..." 
+                            class="w-full border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+
+                <!-- Liste des Prestataires -->
+                <div id="doctorsListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Cards générées dynamiquement par JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reclamation Section -->
+        <section id="reclamationSection" class="hidden w-full max-w-lg mx-auto space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-rose-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <h3 class="text-lg font-bold text-slate-800">Réclamation en Ligne</h3>
+                <form onsubmit="alert('Réclamation envoyée avec succès !'); showSection('menuSection'); return false;" class="space-y-3 text-xs">
+                    <textarea rows="4" placeholder="Tapez votre message ici..." class="w-full border border-slate-200 rounded-xl p-3" required></textarea>
+                    <button type="submit" class="w-full bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-700 transition">Envoyer</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Notifications Section -->
+        <section id="notifSection" class="hidden w-full max-w-lg mx-auto space-y-6">
+            <button onclick="showSection('menuSection')" class="text-xs font-bold text-teal-700 flex items-center space-x-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i><span>Retour au Menu</span>
+            </button>
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <h3 class="text-lg font-bold text-slate-800">Alertes & Rappels</h3>
+                <div class="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-xs">
+                    <strong>⚠️ Pensez à renouveler votre carnet avant la fin de l'année.</strong>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+        © 2026 CNAM Tunisie - Caisse Nationale d'Assurance Maladie.
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Data des prestataires pour l'Annuaire Médical
+        const medicalDirectory = [
+            { name: "Dr. Slim Trabelsi", type: "Médecin Généraliste", gov: "Tunis", address: "12, Avenue Habib Bourguiba, Tunis", phone: "71 234 567", regime: "Tiers-Payant" },
+            { name: "Pharmacie de Nuit Ennasr", type: "Pharmacie", gov: "Ariana", address: "Avenue Hédi Nouira, Ennasr 2, Ariana", phone: "70 888 999", regime: "Tiers-Payant & Remboursement" },
+            { name: "Dr. Amel Ben Ammar", type: "Médecin Spécialiste", gov: "Sousse", address: "Boulevard 14 Janvier, Sousse", phone: "73 111 222", regime: "Remboursement" },
+            { name: "Laboratoire Pasteur d'Analyses", type: "Laboratoire", gov: "Tunis", address: "Rue El Menzah 6, Tunis", phone: "71 555 444", regime: "Tiers-Payant" },
+            { name: "Pharmacie de Garde Sfax", type: "Pharmacie", gov: "Sfax", address: "Route de Teniour Km 3, Sfax", phone: "74 333 111", regime: "Tiers-Payant" },
+            { name: "Dr. Karim Mahjoub (Cardiologue)", type: "Médecin Spécialiste", gov: "Ariana", address: "Centre Médical Les Jasmin, Ariana", phone: "71 777 000", regime: "Tiers-Payant" }
+        ];
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('nameInput').value.trim();
+            const matricule = document.getElementById('matriculeInput').value.trim();
+
+            if(fullName !== '' && matricule !== '') {
+                document.getElementById('displayNameBadge').innerText = fullName;
+                document.getElementById('welcomeNameText').innerText = fullName;
+                document.getElementById('userMatriculeBadge').innerText = matricule;
+                document.getElementById('qrNameText').innerText = fullName;
+                document.getElementById('qrMatriculeText').innerText = "Matricule: " + matricule;
+
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('mainHeader').classList.remove('hidden');
+                showSection('menuSection');
+            }
+        }
+
+        function logout() {
+            document.getElementById('nameInput').value = '';
+            document.getElementById('matriculeInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('mainHeader').classList.add('hidden');
+            document.getElementById('menuSection').classList.add('hidden');
+            document.getElementById('remboursementSection').classList.add('hidden');
+            document.getElementById('priseEnChargeSection').classList.add('hidden');
+            document.getElementById('carnetSection').classList.add('hidden');
+            document.getElementById('annuaireSection').classList.add('hidden');
+            document.getElementById('reclamationSection').classList.add('hidden');
+            document.getElementById('notifSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        function showSection(sectionId) {
+            const sections = ['menuSection', 'remboursementSection', 'priseEnChargeSection', 'carnetSection', 'annuaireSection', 'reclamationSection', 'notifSection'];
+            sections.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            if(sectionId === 'annuaireSection') {
+                filterDoctors(); // Charger la liste des médecins au clic
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fonction pour filtrer et afficher les médecins / pharmacies
+        function filterDoctors() {
+            const gov = document.getElementById('filterGov').value;
+            const type = document.getElementById('filterType').value;
+            const search = document.getElementById('filterSearch').value.toLowerCase();
+            const container = document.getElementById('doctorsListContainer');
+
+            container.innerHTML = '';
+
+            const filtered = medicalDirectory.filter(item => {
+                const matchGov = (gov === 'all' || item.gov === gov);
+                const matchType = (type === 'all' || item.type === type);
+                const matchSearch = item.name.toLowerCase().includes(search) || item.address.toLowerCase().includes(search);
+                return matchGov && matchType && matchSearch;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-400 text-xs">Aucun prestataire trouvé avec ces critères.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-3 shadow-sm hover:border-amber-400 transition";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-slate-800 text-sm">${item.name}</h4>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">${item.regime}</span>
+                        </div>
+                        <span class="text-xs font-semibold text-amber-600 block mb-2"><i class="fa-solid fa-user-doctor mr-1"></i> ${item.type}</span>
+                        
+                        <div class="space-y-1 text-xs text-slate-500">
+                            <p class="flex items-center"><i class="fa-solid fa-location-dot w-4 text-slate-400"></i> ${item.address}</p>
+                            <p class="flex items-center"><i class="fa-solid fa-phone w-4 text-slate-400"></i> <strong class="text-slate-700">${item.phone}</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-medium"><i class="fa-solid fa-city mr-1"></i> ${item.gov}</span>
+                        <a href="tel:${item.phone.replace(/\s/g, '')}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-3 py-1.5 rounded-xl transition flex items-center space-x-1">
+                            <i class="fa-solid fa-phone"></i><span>Appeler</span>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
